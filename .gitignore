@@ -2,3 +2,5 @@ ausbildung/__init__.py
 ausbildung/__pycache__/*
 pruefung/__init__.py
 pruefung/migrations/*
+pruefung/__pycache__/*
+
