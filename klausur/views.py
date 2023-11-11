@@ -1,6 +1,7 @@
 import datetime
 from django.http import Http404
 from django.shortcuts import render
+from .models import *
 
 import locale
 
@@ -11,7 +12,7 @@ locale.setlocale(locale.LC_ALL, "")
 
 def pdf_view(self, request, *args, **kwargs):
     data = {
-        'today': datetime.date.today(), 
+        'today': datetime.date.today(),
         'amount': 39.99,
         'customer_name': 'Cooper Mann',
         'invoice_number': 1233434,
@@ -20,10 +21,10 @@ def pdf_view(self, request, *args, **kwargs):
 
 def advanced_pdf_view(request):
     thema = "Testklausur"
-    namensliste= ("Hans", "Paul", "Robert", "Jasmine", "Antje")
+    fragen = Frage.objects.all()
     context = {
         'thema': thema,
-        'namen': namensliste,
+        'fragen': fragen,
     }
     response = renderers.render_to_pdf("pdfs/klausur.html", context)
     if response.status_code == 404:

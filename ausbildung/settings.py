@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-dso^!^ga#ch#()0b4+cq2!b-8q-pdl2mi(_*^ps3w0@3y@d4u0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['moerle67.pythonanywhere.com']
 
 
 # Application definition
@@ -118,14 +118,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
+#STATICFILES_DIRS = [
+#    BASE_DIR / "static"
+#]
 MEDIA_URL = "/pics/"
 MEDIA_ROOT = BASE_DIR / "static/pics"

@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//DE" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
+        <meta charset="utf-8">
         <title>{% if pdf_title %}{{ pdf_title }}{% else %}PDF{% endif %}</title>
         <style type="text/css">
             body {
@@ -17,7 +18,7 @@
                 font-size: 22px;
                 font-weight: 100;
                 /* text-align: right;*/
-                padding: 10px 20px 0px 20px;  
+                padding: 10px 20px 0px 20px;
             }
             .title span {
                 color: #007cae;
@@ -34,7 +35,7 @@
                 color: #333; /* old IE */
                 background-color: #fff; /* Modern Browsers */
             }
-            @page {
+                @page {
                 size: a4 portrait;
                 @frame header_frame {           /* Static Frame */
                     -pdf-frame-content: header_content;
@@ -57,7 +58,7 @@
         <div id="footer_content">(c) - page <pdf:pagenumber>
             of <pdf:pagecount>
         </div>
-    
+
         <div class='wrapper'>
             <div class='header'>
                 <p class='title'>{{thema}}</p>
@@ -65,11 +66,15 @@
         <div>
             <div id="footer_content"> Seite <pdf:pagenumber>
                 von <pdf:pagecount> </div>
-        {% for name in namen %}
-            <div>
-                {{name}}
-            </div>
-            <p align="right">23</p>
+        {% for frage in fragen %}
+        <div>
+            <div style="width: 80%;">{{forloop.counter}}. {{frage.titel}} </div>
+            <div style="width: 20%;" align="right">_____/ {{frage.punkte}}</div>
+            <p>{{frage.frage|safe}}</p>
+            <br />
+            <br />
+        </div>
+            <!--<pdf:nextpage />-->
         {% endfor%}
     </div>
     </body>
