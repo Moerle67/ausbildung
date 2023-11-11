@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-dso^!^ga#ch#()0b4+cq2!b-8q-pdl2mi(_*^ps3w0@3y@d4u0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['moerle67.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['moerle67.pythonanywhere.com']
 
 
 # Application definition
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pruefung.apps.PruefungConfig',
     'klausur.apps.KlausurConfig',
-    'times.apps.TimesConfig',
 ]
 
 MIDDLEWARE = [
