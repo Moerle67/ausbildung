@@ -4,3 +4,6 @@ from django.shortcuts import render
 
 def index(request):
     return render(request, "times/index.html")
+
+def todo(request):
+    return render(request, 'times/todo.html')
