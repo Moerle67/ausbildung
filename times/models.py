@@ -31,6 +31,7 @@ class Aufgabe(models.Model):
     class Meta:
         verbose_name = ("Aufgabe")
         verbose_name_plural = ("Aufgaben")
+        ordering = ['-prio','titel']
 
     def __str__(self):
         return f"{self.titel} {self.prio} ({self.bereich}/{self.erledigt})"
