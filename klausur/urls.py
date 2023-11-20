@@ -6,4 +6,5 @@ from . import views
 
 urlpatterns = [
     path('', views.advanced_pdf_view, name= 'test'),
+    path('g_pdf/<int:id>', views.gen_pdf, name= 'gen_pdf'),
 ]

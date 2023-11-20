@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 
 # Create your models here.
@@ -20,6 +21,7 @@ class Thema(models.Model):
 
 class Frage(models.Model):
     titel = models.CharField(("Titel"), max_length=250)
+    inhalt = models.CharField("Inhalt", max_length=50, default="?")
     frage = models.TextField(("Frage"))
     musterantwort = models.TextField(("Musterantwort"))
     bild = models.ImageField(("Bild"), blank=True, null=True)
@@ -33,8 +35,48 @@ class Frage(models.Model):
         ordering = ['thema', 'titel', ]
 
     def __str__(self):
-        return f"{self.titel} ({self.thema})"
+        return f"{self.titel}/{self.inhalt} ({self.thema} ({self.punkte} Punkte))"
 
     def get_absolute_url(self):
         return reverse("Fragen_detail", kwargs={"pk": self.pk})
+
+class Klausur(models.Model):
+    titel = models.CharField(("Titel"), max_length=50)
+    thema = models.CharField(("Thema"), max_length=50)
+    termin = models.DateTimeField(("termin"), auto_now=False, auto_now_add=False)
+    gruppe = models.CharField(("Gruppe"), max_length=50)
+    class Meta:
+        verbose_name = ("Klausur")
+        verbose_name_plural = ("Klausuren")
+        ordering = ['-termin']
+
+    def __str__(self):
+        return f"{self.gruppe} - {self.titel}/{self.termin.date()}/{self.get_gesamtpunkte} Punkte"
+
+    def get_absolute_url(self):
+        return reverse("Klausur_detail", kwargs={"pk": self.pk})
+    
+    @property
+    def get_gesamtpunkte(self):
+        themen = self.klausurthema_set.all()
+        gesamtpunkte = sum(frage.frage.punkte for frage in themen)
+        return gesamtpunkte
+
+
+
+class Klausurthema(models.Model):
+    klausur = models.ForeignKey(Klausur, verbose_name=("Klausur"), on_delete=models.CASCADE)
+    frage = models.ForeignKey(Frage, verbose_name=("Frage"), on_delete=models.RESTRICT)
+    position = models.IntegerField(("Position"))
+    seitenwechsel = models.BooleanField(("Seitenwechsel im Anschluss"))
+    class Meta:
+        verbose_name = ("Klausur-Thema")
+        verbose_name_plural = ("Klausur-Themen")
+        ordering = ['klausur', 'position']
+
+    def __str__(self):
+        return f"{self.klausur}/{self.frage}({self.frage.punkte} Punkte)"
+
+    def get_absolute_url(self):
+        return reverse("KlausurThema_detail", kwargs={"pk": self.pk})
 
