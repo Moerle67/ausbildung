@@ -23,10 +23,10 @@ class Frage(models.Model):
     titel = models.CharField(("Titel"), max_length=250)
     inhalt = models.CharField("Inhalt", max_length=50, default="?")
     frage = models.TextField(("Frage"))
-    musterantwort = models.TextField(("Musterantwort"))
+    musterantwort = models.TextField(("Musterantwort"), default ="")
     bild = models.ImageField(("Bild"), blank=True, null=True)
     thema = models.ForeignKey(Thema, verbose_name=("Thema"), on_delete=models.RESTRICT)
-    punkte = models.IntegerField(("Erreichbare Punkte"))
+    punkte = models.IntegerField(("Erreichbare Punkte"), default=1)
     platz = models.IntegerField(("Platz"), default=2)
     schwierigkeit = models.IntegerField(("Schwierigkeit") , default=2)
     class Meta:
