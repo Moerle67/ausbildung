@@ -67,6 +67,7 @@
             <div id="footer_content"> Seite <pdf:pagenumber>
                 von <pdf:pagecount> </div>
         {% for frage in fragen %}
+        {{frage}}
         <div>
             <div style="width: 80%;">{{forloop.counter}}. {{frage.titel}} </div>
             <div style="width: 20%;" align="right">_____/ {{frage.punkte}}</div>

@@ -45,6 +45,7 @@ class Klausur(models.Model):
     thema = models.CharField(("Thema"), max_length=50)
     termin = models.DateTimeField(("termin"), auto_now=False, auto_now_add=False)
     gruppe = models.CharField(("Gruppe"), max_length=50)
+    fragen = models.ManyToManyField(Frage, verbose_name=("Fragen"))
     class Meta:
         verbose_name = ("Klausur")
         verbose_name_plural = ("Klausuren")
@@ -58,8 +59,8 @@ class Klausur(models.Model):
     
     @property
     def get_gesamtpunkte(self):
-        themen = self.klausurthema_set.all()
-        gesamtpunkte = sum(frage.frage.punkte for frage in themen)
+        fragen = self.fragen.all()
+        gesamtpunkte = sum(frage.punkte for frage in fragen)
         return gesamtpunkte
 
 

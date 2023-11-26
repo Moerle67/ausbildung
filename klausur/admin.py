@@ -25,6 +25,7 @@ class KlausurthemaAdmin(admin.ModelAdmin):
 
 @admin.register(Klausur)
 class KlausurAdmin(admin.ModelAdmin):
+    filter_horizontal = ['fragen',]
     list_filter = ['gruppe']
     actions = [pdf_generate]
 

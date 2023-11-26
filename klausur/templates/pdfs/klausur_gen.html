@@ -68,9 +68,9 @@
                 von <pdf:pagecount> </div>
         {% for frage in fragen %}
         <div>
-            <div style="width: 80%;"><b>{{forloop.counter}}. {{frage.frage.inhalt}}</b></div>
-            <div style="width: 20%;" align="right">_____/ {{frage.frage.punkte}}</div>
-            <p>{{frage.frage.frage|safe}}</p>
+            <div style="width: 80%;"><b>{{forloop.counter}}. {{frage.inhalt}}</b></div>
+            <div style="width: 20%;" align="right">_____/ {{frage.punkte}}</div>
+            <p>{{frage.frage|safe}}</p>
             <br />
             <br />
         </div>

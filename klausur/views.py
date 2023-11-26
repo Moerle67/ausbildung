@@ -45,16 +45,18 @@ def advanced_pdf_view(request):
     return response
 
 def gen_pdf(request, id):
-    fragen = Klausurthema.objects.filter(klausur=id)
+    # fragen = Klausurthema.objects.filter(klausur=id)
+    
     klausur = Klausur.objects.get(pk=id)
+    fragen = klausur.fragen.all()
     thema = klausur.titel
     punkte = klausur.get_gesamtpunkte
     termin = klausur.termin.date()
     context = {
+        'fragen': fragen,
         'termin': termin,
         'punkte': punkte,
         'thema': thema,
-        'fragen': fragen,
     }
     response = renderers.render_to_pdf("pdfs/klausur_gen.html", context)
     if response.status_code == 404:
