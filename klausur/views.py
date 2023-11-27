@@ -44,9 +44,10 @@ def advanced_pdf_view(request):
     response["Content-Disposition"] = content
     return response
 
-def gen_pdf(request, id):
+def gen_pdf(request, id, typ):
     # fragen = Klausurthema.objects.filter(klausur=id)
-    
+    # typ 1 - Klausur, 2 - Muster
+
     klausur = Klausur.objects.get(pk=id)
     fragen = klausur.fragen.all()
     thema = klausur.titel
@@ -58,7 +59,11 @@ def gen_pdf(request, id):
         'punkte': punkte,
         'thema': thema,
     }
-    response = renderers.render_to_pdf("pdfs/klausur_gen.html", context)
+    if typ == 1: # Klausur
+        response = renderers.render_to_pdf("pdfs/klausur_gen.html", context)
+    elif typ == 2: # Muster
+        response = renderers.render_to_pdf("pdfs/muster_gen.html", context)        
+    
     if response.status_code == 404:
         raise Http404("Invoice not found")
 
