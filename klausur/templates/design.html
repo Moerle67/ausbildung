@@ -8,7 +8,8 @@
         <div class="shadow">
             <a href="{% url 'richtung' frage.klausur.id frage.frage.id 1 %}">+</a> 
             <a href="{% url 'richtung' frage.klausur.id frage.frage.id 2 %}">-</a> 
-            {{frage}}
+            ({{frage.position}}) {{frage}}
         </div>
     {% endfor %}
+    <div><a href="{% url 'gen_pdf' fragen.0.klausur.id 3 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF generieren</button></a></div>
 {% endblock content %}
