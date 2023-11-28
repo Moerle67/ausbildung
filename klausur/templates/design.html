@@ -1,0 +1,14 @@
+{% extends "start.html" %}
+
+{% block title %}Design Klausuren{% endblock title %}
+
+{% block content %}
+    <h1>Meine Fragen</h1>
+    {% for frage in fragen %}
+        <div class="shadow">
+            <a href="{% url 'richtung' frage.klausur.id frage.frage.id 1 %}">+</a> 
+            <a href="{% url 'richtung' frage.klausur.id frage.frage.id 2 %}">-</a> 
+            {{frage}}
+        </div>
+    {% endfor %}
+{% endblock content %}

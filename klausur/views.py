@@ -1,6 +1,6 @@
 import datetime
-from django.http import Http404
-from django.shortcuts import render
+from django.http import Http404, HttpResponse
+from django.shortcuts import redirect, render
 from .models import *
 
 import locale
@@ -80,3 +80,32 @@ def gen_pdf(request, id, typ):
         content = f"attachment; filename={filename}"
     response["Content-Disposition"] = content
     return response
+
+def klaus_design(request, id):
+    klausur = Klausur.objects.get(pk=id)
+    fragen = klausur.fragen.all()
+    i = 0
+    for frage in fragen:
+        position, created = Klausurthema.objects.get_or_create(klausur = klausur, frage=frage)
+        if created:
+            position.position = i
+            position.save()
+        
+        i +=1
+
+    pos_fragen = Klausurthema.objects.filter(klausur = klausur)
+    content = {
+        'fragen': pos_fragen,
+    }
+    return render(request, "design.html", content)
+
+def richtung(request, klausur, frage, richtung):
+    klausur = Klausur.objects.get(pk=klausur)
+    frage = Frage.objects.get(pk=frage)
+    position = Klausurthema.objects.get(klausur=klausur, frage=frage)
+    if richtung==1 :
+        position.position += 1
+    elif richtung==2:
+        position.position -= 1
+    position.save()
+    return redirect("/klausur/design/"+str(klausur.pk))

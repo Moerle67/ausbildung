@@ -19,6 +19,11 @@ def muster_generate(modeladmin, request, queryset):
     for klausur in queryset:
         return HttpResponseRedirect(f"/klausur/g_pdf/{klausur.pk}/2")
 
+@admin.action(description="Einstellungen Klausur")
+def klaus_einst(modeladmin, request, queryset):
+    for klausur in queryset:
+        return HttpResponseRedirect(f"/klausur/design/{klausur.pk}")
+
 
 @admin.register(Frage)
 class FrageAdmin(admin.ModelAdmin):
@@ -32,5 +37,5 @@ class KlausurthemaAdmin(admin.ModelAdmin):
 class KlausurAdmin(admin.ModelAdmin):
     filter_horizontal = ['fragen',]
     list_filter = ['gruppe']
-    actions = [pdf_generate, muster_generate]
+    actions = [pdf_generate, muster_generate, klaus_einst]
 

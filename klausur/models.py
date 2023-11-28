@@ -27,7 +27,7 @@ class Frage(models.Model):
     bild = models.ImageField(("Bild"), blank=True, null=True)
     thema = models.ForeignKey(Thema, verbose_name=("Thema"), on_delete=models.RESTRICT)
     punkte = models.IntegerField(("Erreichbare Punkte"), default=1)
-    platz = models.IntegerField(("Platz"), default=2)
+#    platz = models.IntegerField(("Platz"), default=2)
     schwierigkeit = models.IntegerField(("Schwierigkeit") , default=2)
     class Meta:
         verbose_name = ("Frage")
@@ -68,8 +68,8 @@ class Klausur(models.Model):
 class Klausurthema(models.Model):
     klausur = models.ForeignKey(Klausur, verbose_name=("Klausur"), on_delete=models.CASCADE)
     frage = models.ForeignKey(Frage, verbose_name=("Frage"), on_delete=models.RESTRICT)
-    position = models.IntegerField(("Position"))
-    seitenwechsel = models.BooleanField(("Seitenwechsel im Anschluss"))
+    position = models.IntegerField(("Position"), default=1)
+    seitenwechsel = models.BooleanField(("Seitenwechsel im Anschluss"), default=False)
     class Meta:
         verbose_name = ("Klausur-Thema")
         verbose_name_plural = ("Klausur-Themen")
