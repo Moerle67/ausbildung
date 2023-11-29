@@ -46,10 +46,17 @@ def advanced_pdf_view(request):
 
 def gen_pdf(request, id, typ):
     # fragen = Klausurthema.objects.filter(klausur=id)
-    # typ 1 - Klausur, 2 - Muster
-
+    # typ 1 - Klausur, 
+    #     2 - Muster
+    #     3 - Sort Fragen
     klausur = Klausur.objects.get(pk=id)
-    fragen = klausur.fragen.all()
+    if typ == 1 or typ == 2:
+        fragen = klausur.fragen.all()
+    elif typ == 3:
+        fragen = []
+        pfragen = Klausurthema.objects.filter(klausur=klausur)
+        for pfrage in pfragen:
+            fragen.append(pfrage.frage)
     thema = klausur.titel
     punkte = klausur.get_gesamtpunkte
     termin = klausur.termin.date()
@@ -59,7 +66,7 @@ def gen_pdf(request, id, typ):
         'punkte': punkte,
         'thema': thema,
     }
-    if typ == 1: # Klausur
+    if typ == 1 or typ == 3: # Klausur
         response = renderers.render_to_pdf("pdfs/klausur_gen.html", context)
     elif typ == 2: # Muster
         response = renderers.render_to_pdf("pdfs/muster_gen.html", context)        

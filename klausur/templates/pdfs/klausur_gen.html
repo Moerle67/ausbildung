@@ -53,11 +53,11 @@
     </head>
     <body>
         <div id="header_content">Name: _______________________________________ Gruppe ___________________________________<br /> {{termin}} -- -- {{thema}} </div>
-        <div align='right'>_____/ {{punkte}}</div>
+        <div align='right'>_____/ {{punkte}} Punkte - ____% Note: ____</div>
         <!-- Content for Static Frame 'footer_frame' -->
         <div id="footer_content">(c) - page <pdf:pagenumber>
             of <pdf:pagecount>
-        </div>
+        </div> 
 
         <div class='wrapper'>
             <div class='header'>
@@ -81,3 +81,18 @@
     </div>
     </body>
 </html>
+<script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+    
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+    
+    function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      ev.target.appendChild(document.getElementById(data));
+    }
+</script>
