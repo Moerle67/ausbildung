@@ -61,6 +61,7 @@ def gen_pdf(request, id, typ):
     punkte = klausur.get_gesamtpunkte
     termin = klausur.termin.date()
     context = {
+        'klausur': klausur,
         'fragen': fragen,
         'termin': termin,
         'punkte': punkte,
@@ -102,6 +103,7 @@ def klaus_design(request, id):
 
     pos_fragen = Klausurthema.objects.filter(klausur = klausur)
     content = {
+        'klausur': klausur,
         'fragen': pos_fragen,
     }
     return render(request, "design.html", content)

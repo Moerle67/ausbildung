@@ -3,7 +3,7 @@
 {% block title %}Design Klausuren{% endblock title %}
 
 {% block content %}
-    <h1>Meine Fragen</h1>
+    <h1>{{klausur}}</h1>
     {% for frage in fragen %} 
         <div class="shadow" draggable="true">
             <a href="{% url 'richtung' frage.klausur.id frage.frage.id 1 %}">+</a> 
