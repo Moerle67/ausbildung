@@ -72,9 +72,9 @@
             <div style="width: 80%;"><b>{{forloop.counter}}. {{frage.inhalt}}</b></div>
             <div style="width: 20%;" align="right">_____/ {{frage.punkte}}</div>
             <p>{{frage.frage|safe}}</p>
-            {% comment %} {% if frage.bild %} {% endcomment %}
-                <img src="{{frage.bild.url}}" alt="{{frage.frage}}">
-            {% comment %} {% endif %} {% endcomment %}
+            {% if frage.bild %}
+                <img src="{{frage.bild.path}}" alt="{{frage.frage}}">
+            {% endif %}
             <br />
             <br />
         </div>

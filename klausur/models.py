@@ -25,6 +25,7 @@ class Frage(models.Model):
     frage = models.TextField(("Frage"))
     musterantwort = models.TextField(("Musterantwort"), default ="")
     bild = models.ImageField(("Bild"), blank=True, null=True)
+    bildbreite = models.IntegerField(("Bildbreite in %"), default=80)
     thema = models.ForeignKey(Thema, verbose_name=("Thema"), on_delete=models.RESTRICT)
     punkte = models.IntegerField(("Erreichbare Punkte"), default=1)
 #    platz = models.IntegerField(("Platz"), default=2)
@@ -46,10 +47,24 @@ class Klausur(models.Model):
     termin = models.DateTimeField(("termin"), auto_now=False, auto_now_add=False)
     gruppe = models.CharField(("Gruppe"), max_length=50)
     fragen = models.ManyToManyField(Frage, verbose_name=("Fragen"))
+
+    @property
+    def get_gesamtpunkte(self):
+        fragen = self.fragen.all()
+        gesamtpunkte = sum(frage.punkte for frage in fragen)
+        return gesamtpunkte
+
+    @property
+    def get_aktiv(self):
+        if self.termin > date.today():
+            return True
+        else:
+            return False
+            
     class Meta:
         verbose_name = ("Klausur")
         verbose_name_plural = ("Klausuren")
-        ordering = ['-termin']
+        ordering = [ 'gruppe', '-termin']
 
     def __str__(self):
         return f"{self.gruppe} - {self.titel}/{self.termin.date()}/{self.get_gesamtpunkte} Punkte"
@@ -57,12 +72,6 @@ class Klausur(models.Model):
     def get_absolute_url(self):
         return reverse("Klausur_detail", kwargs={"pk": self.pk})
     
-    @property
-    def get_gesamtpunkte(self):
-        fragen = self.fragen.all()
-        gesamtpunkte = sum(frage.punkte for frage in fragen)
-        return gesamtpunkte
-
 
 
 class Klausurthema(models.Model):

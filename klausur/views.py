@@ -93,6 +93,7 @@ def klaus_design(request, id):
     klausur = Klausur.objects.get(pk=id)
     fragen = klausur.fragen.all()
     i = 0
+    # Fragen eintragen
     for frage in fragen:
         position, created = Klausurthema.objects.get_or_create(klausur = klausur, frage=frage)
         if created:
@@ -101,6 +102,12 @@ def klaus_design(request, id):
         
         i +=1
 
+    # Datenbank leeren
+    fragen = Klausurthema.objects.filter(klausur=klausur)
+    print(fragen)
+    for frage in fragen:
+        fragek = klausur.fragen.filter(frage=frage)
+        print(fragek)
     pos_fragen = Klausurthema.objects.filter(klausur = klausur)
     content = {
         'klausur': klausur,
