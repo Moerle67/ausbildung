@@ -52,7 +52,7 @@ def gen_pdf(request, id, typ):
     klausur = Klausur.objects.get(pk=id)
     if typ == 1 or typ == 2:
         fragen = klausur.fragen.all()
-    elif typ == 3:
+    elif typ == 3 or typ == 4:
         fragen = []
         pfragen = Klausurthema.objects.filter(klausur=klausur)
         for pfrage in pfragen:
@@ -69,7 +69,7 @@ def gen_pdf(request, id, typ):
     }
     if typ == 1 or typ == 3: # Klausur
         response = renderers.render_to_pdf("pdfs/klausur_gen.html", context)
-    elif typ == 2: # Muster
+    elif typ == 2 or typ == 4: # Muster
         response = renderers.render_to_pdf("pdfs/muster_gen.html", context)        
     
     if response.status_code == 404:

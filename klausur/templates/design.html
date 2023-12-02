@@ -13,6 +13,7 @@
     {% endfor %}
     <div class="row">
         <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 3 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF generieren</button></a></div>
+        <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 4 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF Muster generieren</button></a></div>
         <div class="col-2"><a href="{% url 'zufall' fragen.0.klausur.id %}" ><button class="btn btn-warning" type="submit">Zufällig anordnen</button></a></div>
     </div>   
     {% endblock content %}
