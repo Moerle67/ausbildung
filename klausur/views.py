@@ -1,9 +1,9 @@
 import datetime
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
-from .models import *
+from .models import Klausur, Klausurthema, Frage
 
-import locale
+import locale, random
 
 from . import renderers
 
@@ -98,16 +98,15 @@ def klaus_design(request, id):
         position, created = Klausurthema.objects.get_or_create(klausur = klausur, frage=frage)
         if created:
             position.position = i
-            position.save()
-        
+            position.save()        
         i +=1
 
     # Datenbank leeren
     fragen = Klausurthema.objects.filter(klausur=klausur)
-    print(fragen)
+    # print(fragen)
     for frage in fragen:
-        fragek = klausur.fragen.filter(frage=frage)
-        print(fragek)
+        if not klausur.fragen.filter(id=frage.frage.id).exists():
+            Klausurthema.objects.get(frage=frage.frage, klausur=klausur).delete()
     pos_fragen = Klausurthema.objects.filter(klausur = klausur)
     content = {
         'klausur': klausur,
@@ -120,8 +119,18 @@ def richtung(request, klausur, frage, richtung):
     frage = Frage.objects.get(pk=frage)
     position = Klausurthema.objects.get(klausur=klausur, frage=frage)
     if richtung==1 :
-        position.position += 1
+        position.position += 2
     elif richtung==2:
-        position.position -= 1
+        position.position -= 2
     position.save()
     return redirect("/klausur/design/"+str(klausur.pk))
+
+def zufall(request, klausur):
+    lst = list(range(len(Klausurthema.objects.filter(klausur = Klausur.objects.get(pk=klausur)))))
+    fragen = Klausurthema.objects.filter(klausur=Klausur.objects.get(pk=klausur))
+    for frage in fragen:
+        pos = random.choice(lst)
+        lst.remove(pos)
+        frage.position=pos
+        frage.save()
+    return redirect("/klausur/design/"+str(klausur))
