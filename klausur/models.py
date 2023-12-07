@@ -25,6 +25,7 @@ class Frage(models.Model):
     frage = models.TextField(("Frage"))
     musterantwort = models.TextField(("Musterantwort"), default ="")
     bild = models.ImageField(("Bild"), blank=True, null=True)
+    bildmuster = models.ImageField(("Bild Muster"), blank=True, null=True)
     bildbreite = models.IntegerField(("Bildbreite in %"), default=80)
     thema = models.ForeignKey(Thema, verbose_name=("Thema"), on_delete=models.RESTRICT)
     punkte = models.IntegerField(("Erreichbare Punkte"), default=1)
