@@ -1,5 +1,6 @@
 from datetime import date
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Thema(models.Model):
@@ -15,8 +16,8 @@ class Thema(models.Model):
     def __str__(self):
         return self.titel
 
-    def get_absolute_url(self):
-        return reverse("Thema_detail", kwargs={"pk": self.pk})
+    #def get_absolute_url(self):
+    #    return reverse("Thema_detail", kwargs={"pk": self.pk})
 
 
 class Frage(models.Model):
@@ -39,8 +40,8 @@ class Frage(models.Model):
     def __str__(self):
         return f"{self.titel}/{self.inhalt} ({self.thema} ({self.punkte} Punkte))"
 
-    def get_absolute_url(self):
-        return reverse("Fragen_detail", kwargs={"pk": self.pk})
+    #def get_absolute_url(self):
+    #    return reverse("Fragen_detail", kwargs={"pk": self.pk})
 
 class Klausur(models.Model):
     titel = models.CharField(("Titel"), max_length=50)
@@ -70,8 +71,8 @@ class Klausur(models.Model):
     def __str__(self):
         return f"{self.gruppe} - {self.titel}/{self.termin.date()}/{self.get_gesamtpunkte} Punkte"
 
-    def get_absolute_url(self):
-        return reverse("Klausur_detail", kwargs={"pk": self.pk})
+    #def get_absolute_url(self):
+    #    return reverse("klausur_design", kwargs={"pk": self.pk})
     
 
 
@@ -88,6 +89,6 @@ class Klausurthema(models.Model):
     def __str__(self):
         return f"{self.klausur}/{self.frage}({self.frage.punkte} Punkte)"
 
-    def get_absolute_url(self):
-        return reverse("KlausurThema_detail", kwargs={"pk": self.pk})
+    #def get_absolute_url(self):
+    #    return reverse("KlausurThema_detail", kwargs={"pk": self.pk})
 
