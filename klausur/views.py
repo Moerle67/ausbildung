@@ -48,7 +48,8 @@ def gen_pdf(request, id, typ):
     # fragen = Klausurthema.objects.filter(klausur=id)
     # typ 1 - Klausur, 
     #     2 - Muster
-    #     3 - Sort Fragen
+    #     3 - Design Fragen
+    #     4 - Design Muster
     klausur = Klausur.objects.get(pk=id)
     if typ == 1 or typ == 2:
         fragen = klausur.fragen.all()

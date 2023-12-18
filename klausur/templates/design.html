@@ -4,16 +4,36 @@
 
 {% block content %}
     <h1>{{klausur}}</h1>
-    {% for frage in fragen %} 
-        <div class="shadow" draggable="true">
-            <a href="{% url 'richtung' frage.klausur.id frage.frage.id 1 %}">+</a> 
-            <a href="{% url 'richtung' frage.klausur.id frage.frage.id 2 %}">-</a> 
-            ({{frage.position}}) {{frage}}
-        </div>
-    {% endfor %}
-    <div class="row">
-        <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 3 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF generieren</button></a></div>
-        <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 4 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF Muster generieren</button></a></div>
-        <div class="col-2"><a href="{% url 'zufall' fragen.0.klausur.id %}" ><button class="btn btn-warning" type="submit">Zufällig anordnen</button></a></div>
-    </div>   
-    {% endblock content %}
+    <form action="{% url 'test' %}">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">Frage</th>
+                    <th scope="col">Neue Seite</th>
+                </tr>
+            </thead>
+            <tboby>
+            {% for frage in fragen %}
+                <tr>
+                    <td><a class="link-underline-light" href="{% url 'richtung' frage.klausur.id frage.frage.id 1 %}">+</a></td>
+                    <td><a class="link-underline-light" href="{% url 'richtung' frage.klausur.id frage.frage.id 2 %}">-</a></td>
+                    <td title="{{frage.frage.frage}}">({{frage.position}}) {{frage}}</td>
+                    <td><input class="px-auto form-check-input" type="checkbox" value="{{frage.frage.id}}" id="checkbox{{frage.frage.id}}">
+                </tr>
+            {% endfor %}
+
+            </tboby>
+        </table>
+        <div class="row">
+
+            <div class="col-3"><button type="submit" class="btn btn-outline-success">Klausur generieren</button></div>
+            <div class="col-3"><button type="submit" class="btn btn-outline-success">Muster generieren</button></div>
+            <div class="col-3"><button type="submit" class="btn btn-outline-success">Zufällig anordnen</button></div>
+            <!-- <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 3 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF generieren</button></a></div>
+            <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 4 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF Muster generieren</button></a></div>
+            <div class="col-2"><a href="{% url 'zufall' fragen.0.klausur.id %}" ><button class="btn btn-warning" type="submit">Zufällig anordnen</button></a></div> -->
+        </div>  
+    </form>
+{% endblock content %}
