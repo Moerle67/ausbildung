@@ -135,3 +135,7 @@ def zufall(request, klausur):
         frage.position=pos
         frage.save()
     return redirect("/klausur/design/"+str(klausur))
+
+def newside(request, klausur):
+    print(request.POST)
+    return redirect("/klausur/design/"+str(klausur))

@@ -10,4 +10,5 @@ urlpatterns = [
     path('design/<int:id>', views.klaus_design, name= 'klausur_design'),
     path('pos/<int:klausur>/<int:frage>/<int:richtung>', views.richtung, name= 'richtung'),
     path('random/<int:klausur>', views.zufall, name= 'zufall'),
+    path('newside/<int:klausur>', views.newside, name= 'newside'),
 ]
