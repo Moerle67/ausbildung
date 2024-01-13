@@ -21,10 +21,10 @@
                     <td><a class="link-underline-light" href="{% url 'richtung' frage.klausur.id frage.frage.id 1 %}">+</a></td>
                     <td><a class="link-underline-light" href="{% url 'richtung' frage.klausur.id frage.frage.id 2 %}">-</a></td>
                     <td title="{{frage.frage.frage}}">({{frage.position}}) {{frage}}</td>
-                    <td><input class="px-auto form-check-input" type="checkbox" value="{{frage.frage.id}}" id="checkbox{{frage.frage.id}}" onchange="this.form.submit()" name="nl_{{frage.id}}"></td>
+                    {% comment %} <td><input class="px-auto form-check-input" type="checkbox" value="{{frage.id}}" id="checkbox{{frage.id}}" onchange="this.form.submit()" name="nl"></td> {% endcomment %}
+                    <td><button type="submit" class="btn {% if frage.seitenwechsel %}btn-success{% else %}btn-light{% endif %} btn-sm" value="{{frage.id}}" name="nl">Neue Zeile</button></td>
                 </tr>
             {% endfor %}
-
             </tboby>
         </table>
         <div class="row">

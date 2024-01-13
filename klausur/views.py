@@ -137,5 +137,9 @@ def zufall(request, klausur):
     return redirect("/klausur/design/"+str(klausur))
 
 def newside(request, klausur):
-    print(request.POST)
+    frage=request.POST['nl']
+    ds = Klausurthema.objects.get(id=frage)
+    ds.seitenwechsel = not ds.seitenwechsel
+    ds.save()
+    print(ds.frage)
     return redirect("/klausur/design/"+str(klausur))
