@@ -69,7 +69,7 @@ class Klausur(models.Model):
         ordering = [ 'gruppe', '-termin']
 
     def __str__(self):
-        return f"{self.gruppe} - {self.titel}/{self.termin.date()}/{self.get_gesamtpunkte} Punkte"
+        return f"{self.gruppe} - {self.titel}/{self.termin.date()}/{self.get_gesamtpunkte} Punkte" 
 
     #def get_absolute_url(self):
     #    return reverse("klausur_design", kwargs={"pk": self.pk})

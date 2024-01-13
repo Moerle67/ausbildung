@@ -51,13 +51,15 @@ def gen_pdf(request, id, typ):
     #     3 - Design Fragen
     #     4 - Design Muster
     klausur = Klausur.objects.get(pk=id)
+    fragen = []
     if typ == 1 or typ == 2:
-        fragen = klausur.fragen.all()
+        pfragen = klausur.fragen.all()
+        for pfrage in pfragen:
+            fragen.append((pfrage, False))
     elif typ == 3 or typ == 4:
-        fragen = []
         pfragen = Klausurthema.objects.filter(klausur=klausur)
         for pfrage in pfragen:
-            fragen.append(pfrage.frage)
+            fragen.append((pfrage.frage,pfrage.seitenwechsel))
     thema = klausur.titel
     punkte = klausur.get_gesamtpunkte
     termin = klausur.termin.date()
@@ -136,10 +138,13 @@ def zufall(request, klausur):
         frage.save()
     return redirect("/klausur/design/"+str(klausur))
 
-def newside(request, klausur):
+def newside(request, klausur):    
     frage=request.POST['nl']
-    ds = Klausurthema.objects.get(id=frage)
-    ds.seitenwechsel = not ds.seitenwechsel
-    ds.save()
-    print(ds.frage)
+    if frage == "gen":
+        gen_pdf(request, klausur, 3)
+    else:    
+        ds = Klausurthema.objects.get(id=frage)
+        ds.seitenwechsel = not ds.seitenwechsel
+        ds.save()
+        print(ds.frage)
     return redirect("/klausur/design/"+str(klausur))

@@ -20,15 +20,15 @@
                 <tr>
                     <td><a class="link-underline-light" href="{% url 'richtung' frage.klausur.id frage.frage.id 1 %}">+</a></td>
                     <td><a class="link-underline-light" href="{% url 'richtung' frage.klausur.id frage.frage.id 2 %}">-</a></td>
-                    <td title="{{frage.frage.frage}}">({{frage.position}}) {{frage}}</td>
+                    <td title="{{frage.frage.frage}}">{{forloop.counter}}. ({{frage.position}}) {{frage}}</td>
                     {% comment %} <td><input class="px-auto form-check-input" type="checkbox" value="{{frage.id}}" id="checkbox{{frage.id}}" onchange="this.form.submit()" name="nl"></td> {% endcomment %}
-                    <td><button type="submit" class="btn {% if frage.seitenwechsel %}btn-success{% else %}btn-light{% endif %} btn-sm" value="{{frage.id}}" name="nl">Neue Zeile</button></td>
+                    <td><button type="submit" class="btn {% if frage.seitenwechsel %}btn-success{% else %}btn-light{% endif %} btn-sm" value="{{frage.id}}" name="nl">Neue Seite</button></td>
                 </tr>
             {% endfor %}
             </tboby>
         </table>
         <div class="row">
-            <div class="col-3"><button type="submit" class="btn btn-outline-success">Klausur generieren</button></div>
+            <div class="col-3"><a href="{% url 'gen_pdf' klausur.id 3 %}" target="_empty"><button type="button" name="nl" value="gen" class="btn btn-outline-success">Klausur generieren</button></a></div>
             <div class="col-3"><button type="submit" class="btn btn-outline-success">Muster generieren</button></div>
             <div class="col-3"><button type="submit" class="btn btn-outline-success">Zufällig anordnen</button></div>
             <!-- <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 3 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF generieren</button></a></div>
