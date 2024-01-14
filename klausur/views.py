@@ -135,6 +135,7 @@ def zufall(request, klausur):
         pos = random.choice(lst)
         lst.remove(pos)
         frage.position=pos
+        frage.seitenwechsel = False
         frage.save()
     return redirect("/klausur/design/"+str(klausur))
 

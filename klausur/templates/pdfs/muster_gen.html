@@ -68,10 +68,10 @@
                 von <pdf:pagecount> </div>
         {% for frage in fragen %}
         <div>
-            <div style="width: 80%;"><b>{{forloop.counter}}. {{frage.inhalt}}</b></div>
-            <div style="width: 20%;" align="right">_____/ {{frage.punkte}}</div>
-            <p>{{frage.frage|safe}}</p>
-            <p>{{frage.musterantwort|safe}}</p>
+            <div style="width: 80%;"><b>{{forloop.counter}}. {{frage.0.inhalt}}</b></div>
+            <div style="width: 20%;" align="right">_____/ {{frage.0.punkte}}</div>
+            <p>{{frage.0.frage|safe}}</p>
+            <p>{{frage.0.musterantwort|safe}}</p>
         </div>
             {% if frage.seitenwechsel %}
                 <pdf:nextpage />
