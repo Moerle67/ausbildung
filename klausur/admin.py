@@ -8,6 +8,8 @@ from .models import *
 admin.site.register(Thema)
 #admin.site.register(Klausur)
 #admin.site.register(Klausurthema)
+admin.site.register(Teilnehmer)
+admin.site.register(Gruppe)
 
 @admin.action(description="PDF generieren")
 def pdf_generate(modeladmin, request, queryset):

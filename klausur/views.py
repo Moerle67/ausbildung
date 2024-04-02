@@ -1,7 +1,7 @@
 import datetime
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
-from .models import Klausur, Klausurthema, Frage
+from .models import Klausur, Klausurthema, Frage, Teilnehmer
 
 import locale, random
 
@@ -149,3 +149,24 @@ def newside(request, klausur):
         ds.save()
         print(ds.frage)
     return redirect("/klausur/design/"+str(klausur))
+
+def evaluation(request, klausur):
+    klausur = Klausur.objects.get(id=klausur)
+    tn = klausur.gruppe.teilnehmer.all()
+    print(tn)
+    content = {
+        "klausur": klausur,
+        "teilnehmer": tn,
+    }
+    return render(request, "evaluation.html", content)
+
+def evaluation2(request, klausur, tn):
+    ds_klausur = Klausur.objects.get(id=klausur)
+    ds_tn = Teilnehmer.objects.get(id=tn)
+    ds_fragen = ds_klausur.fragen.all()
+    content = {
+        "klausur": ds_klausur,
+        "teilnehmer": ds_tn,
+        "fragen": ds_fragen
+    }
+    return render(request, "evaluation2.html", content)

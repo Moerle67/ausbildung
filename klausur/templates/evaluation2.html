@@ -1,0 +1,19 @@
+{% extends "start.html" %}
+
+{% block title %}Punkteauswertung ({{teilnehmer}}/{{klausur}}){% endblock title %}
+
+{% block content %}
+    <h1>Punkteauswertung ({{teilnehmer}}/{{klausur}})</h1>
+    <br />
+    <br />
+    <form>    
+    {% for frage in  fragen %}
+    <div class="mb-3 row">
+        <div class="col-9">{{forloop.counter}}. {{frage}} </div>
+        <div class="col-1"><input type="number" class="form-control" ></div>
+        <div class="col-auto">({{frage.punkte}})</div>
+    </div>
+    <hr />
+    {% endfor %}
+    </form>
+{% endblock content %}

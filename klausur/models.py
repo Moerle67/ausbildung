@@ -42,12 +42,41 @@ class Frage(models.Model):
 
     #def get_absolute_url(self):
     #    return reverse("Fragen_detail", kwargs={"pk": self.pk})
+class Teilnehmer(models.Model):
+    name = models.CharField(("Name"), max_length=250)
+    info = models.TextField("Infos", blank=True, null=True)
 
+    class Meta:
+        verbose_name = "Teilnehmer"
+        verbose_name_plural = "Teilnehmers"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("Teilnehmer_detail", kwargs={"pk": self.pk})
+
+class Gruppe(models.Model):
+    name = models.CharField("Bezeichnung", max_length=50)
+    teilnehmer = models.ManyToManyField(Teilnehmer, verbose_name="Teilnehmer")
+
+    class Meta:
+        verbose_name = ("Gruppe")
+        verbose_name_plural = ("Gruppen")
+
+    def __str__(self):
+        return self.name
+
+    #def get_absolute_url(self):
+    #    return reverse("Gruppe_detail", kwargs={"pk": self.pk})
+    
 class Klausur(models.Model):
     titel = models.CharField(("Titel"), max_length=50)
     thema = models.CharField(("Thema"), max_length=50)
     termin = models.DateTimeField(("termin"), auto_now=False, auto_now_add=False)
-    gruppe = models.CharField(("Gruppe"), max_length=50)
+    # gruppe = models.CharField(("Gruppe"), max_length=50)
+    gruppe = models.ForeignKey(Gruppe, verbose_name=("Gruppe"), on_delete=models.CASCADE, null=True)
     fragen = models.ManyToManyField(Frage, verbose_name=("Fragen"))
 
     @property
@@ -92,3 +121,19 @@ class Klausurthema(models.Model):
     #def get_absolute_url(self):
     #    return reverse("KlausurThema_detail", kwargs={"pk": self.pk})
 
+class Answer(models.Model):
+    teilnehmer = models.ForeignKey(Teilnehmer, verbose_name="Teilnhmer*in", on_delete=models.CASCADE)
+    klausur = models.ForeignKey(Klausur, verbose_name="Klausur", on_delete=models.CASCADE)
+    frage = models.ForeignKey(Frage, verbose_name="Frage", on_delete=models.CASCADE)
+    punkte = models.IntegerField(("Punkte"))
+    bemerkung = models.TextField(("Bemerkung"))
+    
+    class Meta:
+        verbose_name = "Antwort"
+        verbose_name_plural = "Antworten"
+
+    def __str__(self):
+        return f"{self.frage} - {self.teilnehmer} ({self.punkte}/self.frage.punkte)"
+
+    def get_absolute_url(self):
+        return reverse("Solution_detail", kwargs={"pk": self.pk})

@@ -31,6 +31,7 @@
             <div class="col-3"><a href="{% url 'gen_pdf' klausur.id 3 %}" target="_empty"><button type="button" name="nl" value="gen" class="btn btn-outline-success">Klausur generieren</button></a></div>
             <div class="col-3"><a href="{% url 'gen_pdf' klausur.id 4 %}" target="_empty"><button type="button" class="btn btn-outline-success">Muster generieren</button></a></div>
             <div class="col-3"><a href="{% url 'zufall' klausur.id %}"><button type="button" class="btn btn-outline-success">Zufällig anordnen</button></a></div>
+            <div class="col-3"><a href="{% url 'evaluation' klausur.id %}"><button type="button" class="btn btn-outline-success">Auswertung</button></a></div>
             <!-- <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 3 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF generieren</button></a></div>
             <div class="col-2"><a href="{% url 'gen_pdf' fragen.0.klausur.id 4 %}" target="_empty"><button class="btn btn-primary" type="submit">PDF Muster generieren</button></a></div>
             <div class="col-2"><a href="{% url 'zufall' fragen.0.klausur.id %}" ><button class="btn btn-warning" type="submit">Zufällig anordnen</button></a></div> -->
