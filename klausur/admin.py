@@ -10,6 +10,7 @@ admin.site.register(Thema)
 #admin.site.register(Klausurthema)
 admin.site.register(Teilnehmer)
 admin.site.register(Gruppe)
+admin.site.register(Answer)
 
 @admin.action(description="PDF generieren")
 def pdf_generate(modeladmin, request, queryset):

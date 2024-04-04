@@ -1,9 +1,10 @@
 import datetime
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
-from .models import Klausur, Klausurthema, Frage, Teilnehmer
-
+from .models import Klausur, Klausurthema, Frage, Teilnehmer, Answer
+from django.db.models import Sum
 import locale, random
+from django.contrib.auth.decorators import permission_required
 
 from . import renderers
 
@@ -18,6 +19,7 @@ def pdf_view(self, request, *args, **kwargs):
         'invoice_number': 1233434,
     }
     return renderers.render_to_pdf('pdfs/invoice.html', data)
+
 
 def advanced_pdf_view(request):
     thema = "Testklausur"
@@ -44,6 +46,7 @@ def advanced_pdf_view(request):
     response["Content-Disposition"] = content
     return response
 
+@permission_required('klausur.view_teilnehmer')
 def gen_pdf(request, id, typ):
     # fragen = Klausurthema.objects.filter(klausur=id)
     # typ 1 - Klausur, 
@@ -92,6 +95,7 @@ def gen_pdf(request, id, typ):
     response["Content-Disposition"] = content
     return response
 
+@permission_required('klausur.view_teilnehmer')
 def klaus_design(request, id):
     klausur = Klausur.objects.get(pk=id)
     fragen = klausur.fragen.all()
@@ -117,6 +121,7 @@ def klaus_design(request, id):
     }
     return render(request, "design.html", content)
 
+@permission_required('klausur.view_teilnehmer')
 def richtung(request, klausur, frage, richtung):
     klausur = Klausur.objects.get(pk=klausur)
     frage = Frage.objects.get(pk=frage)
@@ -128,6 +133,7 @@ def richtung(request, klausur, frage, richtung):
     position.save()
     return redirect("/klausur/design/"+str(klausur.pk))
 
+@permission_required('klausur.view_teilnehmer')
 def zufall(request, klausur):
     lst = list(range(len(Klausurthema.objects.filter(klausur = Klausur.objects.get(pk=klausur)))))
     fragen = Klausurthema.objects.filter(klausur=Klausur.objects.get(pk=klausur))
@@ -139,6 +145,7 @@ def zufall(request, klausur):
         frage.save()
     return redirect("/klausur/design/"+str(klausur))
 
+@permission_required('klausur.view_teilnehmer')
 def newside(request, klausur):    
     frage=request.POST['nl']
     if frage == "gen":
@@ -150,23 +157,70 @@ def newside(request, klausur):
         print(ds.frage)
     return redirect("/klausur/design/"+str(klausur))
 
+@permission_required('klausur.view_teilnehmer')
 def evaluation(request, klausur):
-    klausur = Klausur.objects.get(id=klausur)
-    tn = klausur.gruppe.teilnehmer.all()
-    print(tn)
+    ds_klausur = Klausur.objects.get(id=klausur)
+    ds_tn = ds_klausur.gruppe.teilnehmer.all()
+    lst_tn = []
+    for tn in ds_tn:
+        punkte = Answer.objects.filter(teilnehmer = tn, klausur = ds_klausur).aggregate(Sum("punkte"))['punkte__sum']
+        if punkte != None:
+            prozent = round(punkte / ds_klausur.get_gesamtpunkte * 100, 1)
+        else:
+            prozent = 0
+        lst_tn.append((tn, punkte, prozent))
     content = {
-        "klausur": klausur,
-        "teilnehmer": tn,
+        "klausur": ds_klausur,
+        "teilnehmer": lst_tn,
     }
     return render(request, "evaluation.html", content)
 
+@permission_required('klausur.view_teilnehmer')
 def evaluation2(request, klausur, tn):
+    # Daten aus DB lesen
     ds_klausur = Klausur.objects.get(id=klausur)
     ds_tn = Teilnehmer.objects.get(id=tn)
     ds_fragen = ds_klausur.fragen.all()
+    pos_fragen = Klausurthema.objects.filter(klausur = klausur)
+    list_fragen = []
+    # Gesamtsumme Punkte berechnen
+    sum = 0    
+    for frage in pos_fragen:    
+        if request.method == "POST":
+            # Aus Formular einlesen
+            numb_str = request.POST["punkte_"+str(frage.frage.id)]
+            # Eingabefeld ausgefüllt?
+            if len(numb_str) > 0:
+                number = int(numb_str)
+            else:
+                number = 0
+        else:
+            # Aus DS einlesen
+            ds_answer=Answer.objects.filter(teilnehmer=ds_tn, klausur=ds_klausur, frage=frage.frage)
+            if len(ds_answer) == 0:                                     # Kein DS vorhanden
+                number=0
+            else:
+                number=ds_answer[0].punkte
+        sum += number
+        # Liste Fragen + Punkte erweitern
+        list_fragen.append((frage, number))
+        prozent = round(sum / ds_klausur.get_gesamtpunkte * 100, 1)
+    if "button" in request.POST:
+        if request.POST["button"] == "save":
+            # Datensätze speichern
+            for frage in list_fragen:
+                ds_frage = Frage.objects.get(id=frage[0].frage.id)
+                answer, created = Answer.objects.get_or_create(teilnehmer=ds_tn, klausur=ds_klausur, frage=ds_frage)
+                answer.punkte = frage[1]
+                answer.save()
+            return redirect('evaluation', klausur=str(ds_klausur.id))
+
     content = {
         "klausur": ds_klausur,
         "teilnehmer": ds_tn,
-        "fragen": ds_fragen
+        "fragen": list_fragen,
+        "sum": sum,
+        "max": ds_klausur.get_gesamtpunkte,
+        "prozent": prozent
     }
     return render(request, "evaluation2.html", content)

@@ -64,7 +64,8 @@ class Gruppe(models.Model):
     class Meta:
         verbose_name = ("Gruppe")
         verbose_name_plural = ("Gruppen")
-
+        ordering = ['name']
+        
     def __str__(self):
         return self.name
 
@@ -125,15 +126,21 @@ class Answer(models.Model):
     teilnehmer = models.ForeignKey(Teilnehmer, verbose_name="Teilnhmer*in", on_delete=models.CASCADE)
     klausur = models.ForeignKey(Klausur, verbose_name="Klausur", on_delete=models.CASCADE)
     frage = models.ForeignKey(Frage, verbose_name="Frage", on_delete=models.CASCADE)
-    punkte = models.IntegerField(("Punkte"))
-    bemerkung = models.TextField(("Bemerkung"))
+    punkte = models.IntegerField(("Punkte"), default=0)
+    bemerkung = models.TextField(("Bemerkung"), blank=True, null=True)
     
+
+    @property
+    def get_gesamtpunkte(self, teilnehmer, klausur): 
+        punkte = self.filter(teilnehmer = teilnehmer, klausur = klausur).sum()
+        return punkte
+
     class Meta:
         verbose_name = "Antwort"
         verbose_name_plural = "Antworten"
 
     def __str__(self):
-        return f"{self.frage} - {self.teilnehmer} ({self.punkte}/self.frage.punkte)"
+        return f"{self.frage} - {self.teilnehmer} ({self.punkte}/{self.frage.punkte})"
 
     def get_absolute_url(self):
         return reverse("Solution_detail", kwargs={"pk": self.pk})
